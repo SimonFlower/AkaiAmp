@@ -23,7 +23,8 @@ import time
 from os.path import expanduser
 from filelock import Timeout, FileLock
 import serial
-
+import serial.tools.list_ports
+from serial.serialutil import SerialException
 
 # constant configuration
 HOME = expanduser("~")
@@ -39,7 +40,7 @@ parser.add_argument("amount", choices=[1, 2, 3], default=1, type=int, nargs="?",
                     help="'volume' command: the amount to turn up/down by; other commands: not used")
 parser.add_argument("--wait_for_lock", action="store_true", default=False,
                     help="Wait for the lock to be available rather than exiting with an error if it's not available")
-parser.add_argument("--serial_port", action="store_true", default="default",
+parser.add_argument("--serial_port",
                     help="The serial port to use")
 args = parser.parse_args()
 # the required action is now stored in args.command, args.state and args.amount
@@ -47,9 +48,12 @@ args = parser.parse_args()
 #                      args.serial_port either "default" or the serial port to use
 
 # if neccessary, find the default serial port
-if args.serial_port == "default":
+if not args.serial_port:
     ports = serial.tools.list_ports.comports(include_links=False)
-    serial_port = ports[0]
+    if len (ports) <= 0:
+        print ("No serial ports found on this computer")
+        sys.exit (1)
+    serial_port = ports[0].device
     print ("Default port: " + serial_port)
 else:
     serial_port = args.serial_port
@@ -63,7 +67,8 @@ try:
     with lock.acquire():
         # try to open the serial port
         try:
-            with serial.Serial(serial_port, 9600, timeout=0, parity=serial.PARITY_EVEN)
+            with serial.Serial(serial_port, 9600, timeout=0, parity=serial.PARITY_EVEN):
+                pass
         except SerialException:
             print ("Unable to open serial port: " + serial_port)
             sys.exit (1)
