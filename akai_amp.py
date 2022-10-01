@@ -30,6 +30,19 @@ from serial.serialutil import SerialException
 HOME = expanduser("~")
 LOCK_FILE = os.path.join (HOME, ".akai_amp.lock")
 
+def makeBytes (int_array):
+    return bytes(bytearray(int_array))
+    
+def receive (ser, size):
+    rx_array = []
+    while True:
+        rx_byte = ser.read (size=1)
+        if len (rx_byte) <= 0:
+            return rx_array
+        rx_array = rx_array + rx_byte
+        if len (rx_array) >= size
+            return rx_array
+
 # process the command line to find out what to do
 parser = argparse.ArgumentParser()
 parser.add_argument("command", choices=["power", "volume", "reset"],
@@ -67,8 +80,12 @@ try:
     with lock.acquire():
         # try to open the serial port
         try:
-            with serial.Serial(serial_port, 9600, timeout=0, parity=serial.PARITY_EVEN):
-                pass
+            with serial.Serial(serial_port, 9600, timeout=1, parity=serial.PARITY_NONE) as ser:
+                tx_data = makeBytes ([0xff]
+                ser.write (tx_data)
+                print ("Transmitted data: " + tx_data.hex())
+                rx_data = receive (ser, 10)
+                print ("Received data: " + rx_data.hex())
         except SerialException:
             print ("Unable to open serial port: " + serial_port)
             sys.exit (1)
