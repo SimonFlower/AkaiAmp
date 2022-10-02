@@ -12,6 +12,18 @@ installed:
 https://www.hifiberry.com/hifiberryos/
 https://github.com/hifiberry/hifiberry-os
 
+Project dependencies
+--------------------
+
+The CH341 USB to serial driver.
+
+Python 3.
+
+The following python modules:
+        - pip install filelock
+        - pip install pyserial
+
+
 Relay card details
 ------------------
 
@@ -39,3 +51,11 @@ Commands for relay operation or status inquiry (in HEX):
 - Open 4th channel USB: A0 04 01 A5
 - Close 4th channel USB: A0 04 00 A4
 - Status inquiry: FF
+
+Relay card channel usage
+------------------------
+
+Channel 1: mains power on/off
+Channel 2: not used
+Channel 3: motor driver 1
+Channel 4: motor driver 2
