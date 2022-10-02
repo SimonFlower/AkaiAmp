@@ -3,14 +3,29 @@ Akai Amp Project
 
 An Akai AM75 Amp has had its volume control changed to use
 a motor controlled potentiometer. This project uses hardware
-controlled by a Rapsberry Pi B+ and a relay card to control
+controlled by a Rapsberry Pi 3B+ and a relay card to control
 the volume potentiometer and also to switch the mains for
 the amplifier.
+
+The software runs on a Rasperry Pi 3B+ that has had HiFiBerryOS
+installed: 
+https://www.hifiberry.com/hifiberryos/
+https://github.com/hifiberry/hifiberry-os
 
 Relay card details
 ------------------
 
 http://www.chinalctech.com/cpzx/32.html
+
+This boards uses the CH340 UART to USB chip, which needs a driver
+(https://learn.sparkfun.com/tutorials/how-to-install-ch340-drivers/all).
+The driver seems to be installed on HiFiBerryOS, but the card was not
+recognised when plugged in before trying:
+
+        sudo depmod -a
+        
+As described in the driver installation manual:
+https://github.com/juliagoda/CH341SER
 
 The default baud rate is 9600 bps.
 
