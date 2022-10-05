@@ -1,0 +1,75 @@
+{
+	"favourites": {
+		"bbc_radio_1_320k": {
+			"title": "BBC Radio 1 (320K)",
+			"img": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/BBC_Radio_1.svg/1000px-BBC_Radio_1.svg.png",
+			"url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_one.m3u8"
+		},
+		"bbc_radio_1xtra_320k": {
+			"title": "BBC Radio 1Xtra (320K)",
+			"img": "https://upload.wikimedia.org/wikipedia/en/thumb/e/ea/BBC_Radio_1Xtra_logo.svg/1024px-BBC_Radio_1Xtra_logo.svg.png",
+			"url": "https://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_1xtra.m3u8"
+		},
+		"bbc_radio_2_320k": {
+			"title": "BBC Radio 2 (320K)",
+			"img": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/BBC_Radio_2.svg/1000px-BBC_Radio_2.svg.png",
+			"url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_two.m3u8"
+		},
+		"bbc_radio_3_320k": {
+			"title": "BBC Radio 3 (320K)",
+			"img": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/BBC_Radio_3.svg/1000px-BBC_Radio_3.svg.png",
+			"url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_three.m3u8"
+		},
+		"bbc_radio_4_320k": {
+			"title": "BBC Radio 4 (320K)",
+			"img": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Logo_BBC_Radio_4.svg/1000px-Logo_BBC_Radio_4.svg.png",
+			"url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_fourfm.m3u8"
+		},
+		"bbc_radio_4lw_320k": {
+			"title": "BBC Radio 4LW (320K)",
+			"img": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Logo_BBC_Radio_4.svg/1000px-Logo_BBC_Radio_4.svg.png",
+			"url": "https://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_fourlw.m3u8"
+		},
+		"bbc_radio_4xtra_320k": {
+			"title": "BBC Radio 4Xtra (320K)",
+			"img": "https://media.info/i/lf/300/1637794649/468.png",
+			"url": "https://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_four_extra.m3u8"
+		},
+		"bbc_radio_5_live": {
+			"title": "BBC Radio 5 Live (320K)",
+			"img": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Logo_BBC_Radio_5_Live.svg/1024px-Logo_BBC_Radio_5_Live.svg.png",
+			"url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_6music.m3u8"
+		},
+		"bbc_radio_5_live_sports_extra": {
+			"title": "BBC Radio 5 Live Sports Extra (320K)",
+			"img": "https://media.info/i/lv/bbc-radio-5-live-sports-extra/1648307295/417.png",
+			"url": "https://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_five_live_sports_extra.m3u8"
+		},
+		"bbc_radio_6_320k": {
+			"title": "BBC Radio 6 Music (320K)",
+			"img": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Logo_BBC_6_Music.svg/1024px-Logo_BBC_6_Music.svg.png",
+			"url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_6music.m3u8"
+		},
+		"bbc_radio_asian_network_320k": {
+			"title": "BBC Radio Asian Network (320K)",
+			"img": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/BBC_Asian_Network_2022.svg/1024px-BBC_Asian_Network_2022.svg.png",
+			"url": "https://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_asian_network.m3u8"
+		},
+		"bbc_radio_scotland_320k": {
+			"title": "BBC Radio Scotland (320K)",
+			"img": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/BBC_Radio_Scotland_2022.svg/1024px-BBC_Radio_Scotland_2022.svg.png",
+			"url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_med/ak/bbc_radio_scotland_fm.m3u8"
+		},
+                "classic_fm": {
+			"title": "Classic FM",
+			"img": "https://media.info/i/lv/classic-fm/1405203730/225.png",
+			"url": "http://media-ice.musicradio.com:80/ClassicFMMP3"
+                }
+	}
+}
+
+
+
+
+
+

@@ -1,3 +1,5 @@
+#!/bin/python
+#
 # python program to control relays via a serial port, which, in turn, control
 # the power to an Akai amplifier and also turn up/down its volume
 #
