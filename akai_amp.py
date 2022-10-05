@@ -5,7 +5,8 @@
 #
 # For details of command line options:
 #   akai_amp -h
-# The reset command consists of a "power off" followed by three "volume down 3" commands
+# The reset command turns off all relays, then does three "volume down 3" commands
+# to turn the volume control right down.
 #
 # Exit codes:
 #   0 - normal successful completion
@@ -26,8 +27,22 @@ from serial.serialutil import SerialException
 HOME = expanduser("~")
 # where the lock file is stored
 LOCK_FILE = os.path.join (HOME, ".akai_amp.lock")
-# the length of time to turn the motor for a "volume" command
+# the length of time to "turn" the motor for a "volume" command
 VOLUME_TURN_LENGTH_SECS = 1
+# a delay between sending serial commands to the relay card
+# without this delay the card misses commands
+INTRA_CMD_SER_DELAY_SECS = 0.1
+# codes to turn on and off the individual relays
+CH1_ON_MSG =     [0xa0, 0x01, 0x01, 0xa2]
+CH1_OFF_MSG =    [0xa0, 0x01, 0x00, 0xa1]
+CH2_ON_MSG =     [0xa0, 0x02, 0x01, 0xa3]
+CH2_OFF_MSG =    [0xa0, 0x02, 0x00, 0xa2]
+CH3_ON_MSG =     [0xa0, 0x03, 0x01, 0xa4]
+CH3_OFF_MSG =    [0xa0, 0x03, 0x00, 0xa3]
+CH4_ON_MSG =     [0xa0, 0x04, 0x01, 0xa5]
+CH4_OFF_MSG =    [0xa0, 0x04, 0x00, 0xa4]
+STATUS_REQ_MSG = [0xff]
+
 
 def errExit (msg, status):
     '''
@@ -79,7 +94,7 @@ def cmd_status (ser):
     Parameters:
     ser (serial.Serial): the opened serial port (from pySerial package)
     '''
-    ser.write (makeBytes ([0xff]))
+    ser.write (makeBytes (STATUS_REQ_MSG))
     rx_data = receive (ser, 100)
     print ("Relay status:")
     print (str(rx_data, "UTF-8"))
@@ -93,12 +108,11 @@ def cmd_power (ser, state):
     state (string): "on" or "off"
     '''
     if state == "on":
-        msg = [0xa0, 0x01, 0x01, 0xa2]
+        ser.write (makeBytes (CH1_ON_MSG))
     elif state == "off":
-        msg = [0xa0, 0x01, 0x00, 0xa1]
+        ser.write (makeBytes (CH1_OFF_MSG))
     else:
         errExit ("Unrecognised state for 'power' command: " + state, 1)
-    ser.write (makeBytes (msg))
     
 def cmd_volume (ser, state, amount):
     '''
@@ -109,24 +123,45 @@ def cmd_volume (ser, state, amount):
     state (string): "up" or "down"
     amount (int): the length of time to turn the volume motor
     '''
-    # TODO - work out how to use the relays to drive the motor
-    #        for the moment just turn the relays on/off (ignore state)
-    ch3_on_msg =  [0xa0, 0x03, 0x01, 0xa4]
-    ch4_on_msg =  [0xa0, 0x04, 0x01, 0xa5]
-    ch3_off_msg = [0xa0, 0x03, 0x00, 0xa3]
-    ch4_off_msg = [0xa0, 0x04, 0x00, 0xa4]
-    ser.write (makeBytes (ch3_on_msg))
-    ser.write (makeBytes (ch4_on_msg))
+    if state == "up":
+        ser.write (makeBytes (CH3_ON_MSG))
+        time.sleep (INTRA_CMD_SER_DELAY_SECS)
+        ser.write (makeBytes (CH4_OFF_MSG))
+    else:
+        ser.write (makeBytes (CH3_OFF_MSG))
+        time.sleep (INTRA_CMD_SER_DELAY_SECS)
+        ser.write (makeBytes (CH4_ON_MSG))
     time.sleep (amount * VOLUME_TURN_LENGTH_SECS)
-    ser.write (makeBytes (ch3_off_msg))
-    ser.write (makeBytes (ch4_off_msg))
+    ser.write (makeBytes (CH3_OFF_MSG))
+    time.sleep (INTRA_CMD_SER_DELAY_SECS)
+    ser.write (makeBytes (CH4_OFF_MSG))
+
+def cmd_reset (ser, state):
+    '''
+    Reset the relays
+    
+    Parameters:
+    ser (serial.Serial): the opened serial port (from pySerial package)
+    state (string): set to "all" to turn the volume right down, anything else just reset the relays
+    '''
+    ser.write (makeBytes (CH1_OFF_MSG))
+    time.sleep (INTRA_CMD_SER_DELAY_SECS)
+    ser.write (makeBytes (CH2_OFF_MSG))
+    time.sleep (INTRA_CMD_SER_DELAY_SECS)
+    ser.write (makeBytes (CH3_OFF_MSG))
+    time.sleep (INTRA_CMD_SER_DELAY_SECS)
+    ser.write (makeBytes (CH4_OFF_MSG))
+    if state == "all":
+        time.sleep (INTRA_CMD_SER_DELAY_SECS)
+        cmd_volume (ser, "down", 10)
+
 
 # process the command line to find out what to do
 parser = argparse.ArgumentParser()
 parser.add_argument("command", choices=["power", "volume", "reset", "status"],
                     help="what you want the program to do: power, volume, status or reset")
-parser.add_argument("state", choices=["on", "up", "off", "down"], default="off", nargs="?",
-                    help="'power' command: 'on' or 'off'; 'volume' command: 'up' or 'down'; 'reset' command: not used")
+parser.add_argument("state", choices=["on", "up", "off", "down", "all"], default="off", nargs="?",
+                    help="'power' command: 'on' or 'off'; 'volume' command: 'up' or 'down'; 'reset' command: 'all' or not used")
 parser.add_argument("amount", choices=[1, 2, 3], default=1, type=int, nargs="?",
                     help="'volume' command: the amount to turn up/down by; other commands: not used")
 parser.add_argument("--wait_for_lock", action="store_true", default=False,
@@ -155,9 +190,7 @@ try:
                 elif args.command == "volume":
                     cmd_volume (ser, args.state, args.amount)
                 elif args.command == "reset":
-                    cmd_power (ser, "off")
-                    time.sleep (0.2)
-                    cmd_volume (ser, "down", 10)
+                    cmd_reset (ser, args.state)
                 else:
                     errExit ("Internal software error: command = " + args.command, 1)
         except SerialException:
