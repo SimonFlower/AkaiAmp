@@ -2,6 +2,24 @@
 #
 # A simple installation script that mimics the "make" command
 
+# configuration
+TARGET_FOLDER=/etc/beocreate/beo-extensions/akai_amp
+
+install_folder ()
+{
+        install -v -d -m755 $1
+}
+
+install_file ()
+{
+        install -v -m644 $1 $2
+}
+
+install_exe_file ()
+{
+        install -v -m755 $1 $2
+}
+
 # process the command line
 if [ $# -le 0 ] ; then
 	echo "This program installs the AkaiAmp components on a Raspberry PI system that"
@@ -23,17 +41,22 @@ if [ `id -u` -ne 0 ] ; then
 fi
 
 # perform the install
-install -m755 akai_amp.py /usr/bin
+install_exe_file akai_amp.py /usr/bin
 
-install -m644 radio.json /etc/beocreate/
+install_file radio.json /etc/beocreate/
 
-install -d -m755 /etc/beocreate/beo-extensions/akai_amp
-install -d -m755 /etc/beocreate/beo-extensions/akai_amp/symbols-black
-install -d -m755 /etc/beocreate/beo-extensions/akai_amp/symbols-white
+install_folder $TARGET_FOLDER
+install_folder $TARGET_FOLDER/symbols-black
+install_folder $TARGET_FOLDER/symbols-white
 
-install -m644 beocreate_extension/menu.html /etc/beocreate/beo-extensions/akai_amp/
-install -m644 beocreate_extension/akai_amp.css /etc/beocreate/beo-extensions/akai_amp/
-install -m644 beocreate_extension/symbols-black/akai_amp-signature.svg /etc/beocreate/beo-extensions/akai_amp/symbols-black/
-install -m644 beocreate_extension/symbols-white/akai_amp-signature.svg /etc/beocreate/beo-extensions/akai_amp/symbols-white/
+install_file beocreate_extension/menu.html $TARGET_FOLDER
+install_file beocreate_extension/akai_amp.css $TARGET_FOLDER
+install_file beocreate_extension/akai_amp-client.js $TARGET_FOLDER
+install_file beocreate_extension/index.js $TARGET_FOLDER
+install_file beocreate_extension/package.json $TARGET_FOLDER
+install_file beocreate_extension/symbols-black/akai_amp-signature.svg $TARGET_FOLDER/symbols-black/
+install_file beocreate_extension/symbols-black/power.svg $TARGET_FOLDER/symbols-black/
+install_file beocreate_extension/symbols-white/akai_amp-signature.svg $TARGET_FOLDER/symbols-white/
+install_file beocreate_extension/symbols-white/power.svg $TARGET_FOLDER/symbols-white/
 
 

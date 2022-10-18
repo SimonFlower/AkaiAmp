@@ -1,0 +1,21 @@
+{
+  "name": "@beocreate/akai_amp",
+  "version": "0.1.0",
+  "description": "Interface to control power and volume on an Akai Amplifier.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/SimonFlower/AkaiAmp"
+  },
+  "keywords": [
+    "amplifier",
+    "beocreate",
+    "bang",
+    "olufsen"
+  ],
+  "author": "Simon Flower",
+  "license": "MIT"
+}
