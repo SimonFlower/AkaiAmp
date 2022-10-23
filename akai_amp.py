@@ -12,6 +12,9 @@
 #   0 - normal successful completion
 #   1 - an error
 #   2 - unable to acquire the lock (another instance of the program is running)
+#
+# The error messages written by this program will be presented to the user
+# of the beocreate program, so should make sense in this context.
 
 import sys
 import os
@@ -24,9 +27,8 @@ import serial.tools.list_ports
 from serial.serialutil import SerialException
 
 # constant configuration
-HOME = expanduser("~")
 # where the lock file is stored
-LOCK_FILE = os.path.join (HOME, ".akai_amp.lock")
+LOCK_FILE = "/tmp/.akai_amp.lock"
 # the length of time to "turn" the motor for a "volume" command
 VOLUME_TURN_LENGTH_SECS = 1
 # a delay between sending serial commands to the relay card
@@ -87,7 +89,7 @@ def receive (ser, max_len):
         if len (rx_array) >= max_len:
             return rx_array
 
-def cmd_status (ser):
+def cmd_status (ser, state):
     '''
     Print the status of the relays on the relay card
     
@@ -96,8 +98,21 @@ def cmd_status (ser):
     '''
     ser.write (makeBytes (STATUS_REQ_MSG))
     rx_data = receive (ser, 100)
-    print ("Relay status:")
-    print (str(rx_data, "UTF-8"))
+    rx_str = str(rx_data, "UTF-8").replace ('\r', '')
+    if state == "short":
+        output = ""
+        for channel in range (1, 5):
+            search_str = "CH" + str (channel) + ": "
+            if rx_str.find (search_str + "OFF") >= 0:
+                output += "0"
+            elif rx_str.find (search_str + "ON") >= 0:
+                output += "1"
+            else:
+                errExit ("Unrecognised status information received from amplifier relay card.", 1)
+        print (output)
+    else:
+        print ("Relay status:")
+        print (rx_str)
 
 def cmd_power (ser, state):
     '''
@@ -112,7 +127,7 @@ def cmd_power (ser, state):
     elif state == "off":
         ser.write (makeBytes (CH1_OFF_MSG))
     else:
-        errExit ("Unrecognised state for 'power' command: " + state, 1)
+        errExit ("Unrecognised state for 'power' command: " + state + ".", 1)
     
 def cmd_volume (ser, state, amount):
     '''
@@ -160,8 +175,8 @@ def cmd_reset (ser, state):
 parser = argparse.ArgumentParser()
 parser.add_argument("command", choices=["power", "volume", "reset", "status"],
                     help="what you want the program to do: power, volume, status or reset")
-parser.add_argument("state", choices=["on", "up", "off", "down", "all"], default="off", nargs="?",
-                    help="'power' command: 'on' or 'off'; 'volume' command: 'up' or 'down'; 'reset' command: 'all' or not used")
+parser.add_argument("state", choices=["on", "up", "off", "down", "all", "long", "short"], default="off", nargs="?",
+                    help="'status' command: 'short' or 'long'; 'power' command: 'on' or 'off'; 'volume' command: 'up' or 'down'; 'reset' command: 'all' or not used")
 parser.add_argument("amount", choices=[1, 2, 3], default=1, type=int, nargs="?",
                     help="'volume' command: the amount to turn up/down by; other commands: not used")
 parser.add_argument("--wait_for_lock", action="store_true", default=False,
@@ -184,7 +199,7 @@ try:
         try:
             with serial.Serial(args.serial_port, 9600, timeout=1, parity=serial.PARITY_NONE) as ser:
                 if args.command == "status":
-                    cmd_status (ser)
+                    cmd_status (ser, args.state)
                 elif args.command == "power":
                     cmd_power (ser, args.state)
                 elif args.command == "volume":
@@ -192,11 +207,11 @@ try:
                 elif args.command == "reset":
                     cmd_reset (ser, args.state)
                 else:
-                    errExit ("Internal software error: command = " + args.command, 1)
+                    errExit ("Internal software error: command = " + args.command + ".", 1)
         except SerialException:
-            errExit ("Unable to open serial port: " + args.serial_port, 1)
+            errExit ("Unable to open amplifier serial port: " + args.serial_port + ".", 1)
 except Timeout:
-    errExit ("Another instance of this application currently holds the lock", 2)
+    errExit ("Amplifier busy processing another request.", 2)
 
 # normal succesful completion
 sys.exit (0)
