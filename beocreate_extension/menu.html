@@ -9,17 +9,24 @@
     <div class="scroll-area">
         <div class="menu-content">
             <h2 class="amplifier_control-title">Amplifier Control</h2>
-            <div class="menu-item icon" onclick="beo.ask('amp-powerdown-prompt');">
+            <div class="menu-item icon toggle" id="akai_amp_power_toggle" onclick="akai_amp.toggle_power();">
                 <div class="menu-icon" 
                      style="-webkit-mask-image: url(€/symbols-black/power.svg); mask-image: url(€/symbols-black/power.svg);">
                 </div>
-                <div class="menu-label">Power…</div>
+                <div class="menu-label">Power</div>
+                <div class="menu-toggle"></div>
             </div>
             <div class="menu-item icon setup-hide" onclick="akai_amp.reset();">
                 <div class="menu-icon"
                      style="-webkit-mask-image: url(€/symbols-black/reset.svg); mask-image: url(€/symbols-black/reset.svg);">
                 </div>
                 <div class="menu-label">Reset Amplifier</div>
+            </div>
+            <!-- area for status messages -->
+            <div class="hidden" id="status_message">
+                <hr/>
+                <h2 id="status_message_title">Status</h2>
+                <p id="status_message_body"></p>
             </div>
             <!-- area for error messages -->
             <div class="hidden" id="error_message">
@@ -28,15 +35,6 @@
                 <p id="error_message_body"></p>
             </div>
         </div>
-    </div>
-	
-    <div class="ask-menu" id="amp-powerdown-prompt">
-        <h2>Akai Amp Power</h2>
-        <div class="ask-buttons">
-            <div class="button pill grey" onclick="akai_amp.power('off');">Power off</div>
-            <div class="button pill grey" onclick="akai_amp.power('on');">Power on</div>
-        </div>
-    </div>
-    
+    </div>	
 </div>
 
