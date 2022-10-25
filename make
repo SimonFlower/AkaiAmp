@@ -57,8 +57,10 @@ install_file beocreate_extension/package.json $TARGET_FOLDER
 install_file beocreate_extension/symbols-black/akai_amp-signature.svg $TARGET_FOLDER/symbols-black/
 install_file beocreate_extension/symbols-black/power.svg $TARGET_FOLDER/symbols-black/
 install_file beocreate_extension/symbols-black/reset.svg $TARGET_FOLDER/symbols-black/
+install_file beocreate_extension/symbols-black/volume.svg $TARGET_FOLDER/symbols-black/
 install_file beocreate_extension/symbols-white/akai_amp-signature.svg $TARGET_FOLDER/symbols-white/
 install_file beocreate_extension/symbols-white/power.svg $TARGET_FOLDER/symbols-white/
 install_file beocreate_extension/symbols-white/reset.svg $TARGET_FOLDER/symbols-white/
+install_file beocreate_extension/symbols-white/volume.svg $TARGET_FOLDER/symbols-white/
 
 

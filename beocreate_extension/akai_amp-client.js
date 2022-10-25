@@ -193,16 +193,3 @@ var akai_amp = (function() {
         toggle_power: toggle_power
     };
 })();
-
-/* request the status of the relays when the page loads */
-/*
-function akai_amp_init() {
-    beo.send(make_status_msg ("power"));
-}
-if (window.attachEvent) 
-    window.attachEvent('onload', akai_amp_init);
-else if (window.addEventListener) 
-    window.addEventListener('load', akai_amp_init, false);
-else
-    document.addEventListener('load', akai_amp_init, false);
-*/

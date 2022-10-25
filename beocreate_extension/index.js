@@ -14,7 +14,6 @@ var power_on = false;
 
 // get the initial state of the power relay
 exec("akai_amp.py status short", function(error, stdout, stderr) {
-    console.log ("akai_amp: power request data: " + stdout);
     if (stdout.length < 4)
         console.error ("akai_amp: bad response from 'akai_amp.py status short': " + stdout);
     else if (stdout.substring (0,1) == "1")
@@ -23,7 +22,6 @@ exec("akai_amp.py status short", function(error, stdout, stderr) {
         power_on = false;
     else
         console.error ("akai_amp: bad response from 'akai_amp.py status short': " + stdout);
-    console.log ("akai_amp: initial power relay state: " + String (power_on));
 });
 
 
@@ -78,9 +76,7 @@ beo.bus.on('akai_amp', function(client_msg) {
             // what parameter is status required for?
             switch (client_msg.content.request) {
                 case "power":
-                    response = make_status_msg (client_msg, power_on);
-                    beo.sendToUI("akai_amp", response);
-                    console.log (response);
+                    beo.sendToUI("akai_amp", make_status_msg (client_msg, power_on));
                     break;
                 default:
                     console.error ("akai_amp: unrecognised action request: " + client_msg.content.request);

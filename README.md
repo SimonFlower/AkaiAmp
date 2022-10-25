@@ -35,6 +35,13 @@ in this menu).
 
 The default login is user "root", password "hifiberry".
 
+Change the system name from the default of "HiFiBerry". In the top level
+menu, click on the 3 dots under the "HiFiBerry" title, then from the menu
+select "Change Name". Change the name (e.g. to "Sitting Room HiFi" and click
+on the tick icon. Note that the system host name will be changed, converting
+the name you have used to all lower case and replacing spaces with hyphens
+(e.g. "sitting-room-hifi").
+
 HifiberryOS is created using buildroot. Networking in buildroot is configured 
 in /etc/systemd/network/. See https://wiki.archlinux.org/title/systemd-networkd
 for more details. To set up networking, edit the files in this folder as follow:

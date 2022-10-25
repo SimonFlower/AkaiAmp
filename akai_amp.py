@@ -30,7 +30,7 @@ from serial.serialutil import SerialException
 # where the lock file is stored
 LOCK_FILE = "/tmp/.akai_amp.lock"
 # the length of time to "turn" the motor for a "volume" command
-VOLUME_TURN_LENGTH_SECS = 1
+VOLUME_TURN_LENGTH_SECS = 0.4
 # a delay between sending serial commands to the relay card
 # without this delay the card misses commands
 INTRA_CMD_SER_DELAY_SECS = 0.1
@@ -139,13 +139,13 @@ def cmd_volume (ser, state, amount):
     amount (int): the length of time to turn the volume motor
     '''
     if state == "up":
-        ser.write (makeBytes (CH3_ON_MSG))
-        time.sleep (INTRA_CMD_SER_DELAY_SECS)
-        ser.write (makeBytes (CH4_OFF_MSG))
-    else:
         ser.write (makeBytes (CH3_OFF_MSG))
         time.sleep (INTRA_CMD_SER_DELAY_SECS)
         ser.write (makeBytes (CH4_ON_MSG))
+    else:
+        ser.write (makeBytes (CH3_ON_MSG))
+        time.sleep (INTRA_CMD_SER_DELAY_SECS)
+        ser.write (makeBytes (CH4_OFF_MSG))
     time.sleep (amount * VOLUME_TURN_LENGTH_SECS)
     ser.write (makeBytes (CH3_OFF_MSG))
     time.sleep (INTRA_CMD_SER_DELAY_SECS)
